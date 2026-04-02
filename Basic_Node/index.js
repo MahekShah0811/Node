@@ -1,4 +1,4 @@
-const fs = require('node:fs');
+// const fs = require('node:fs');
 // fs = file system 
 
 
@@ -115,7 +115,15 @@ const fs = require('node:fs');
 
 // Note : if node version is less then 25 then use fs.rmdir() method to delete folder. But if node version is 25 or above then use fs.rm() method to delete folder. Because fs.rmdir() method is deprecated in node version 25 and above.
 // fs.rmdir(path, {options}, callback function(error))
-fs.rmdir("CSS/Home/Design", {recursive: true, force: true}, (err) => {
-    if (err) throw err;      
-    console.log("Folder deleted successfully.")
-});
+// fs.rmdir("CSS/Home/Design", {recursive: true, force: true}, (err) => {
+//     if (err) throw err;      
+//     console.log("Folder deleted successfully.")
+// });
+
+
+
+// chalk is a library that is used to style the terminal string output. It provides a simple and easy-to-use API to add colors, background colors, and other styles to the terminal output. With chalk, you can make your terminal output more visually appealing and easier to read by using different colors and styles for different types of messages (e.g., errors, warnings, success messages). It is commonly used in Node.js applications to enhance the user experience when displaying information in the terminal.
+import chalk from 'chalk';
+console.log(chalk.blue("Write with chalk"));
+console.log(chalk.bgWhite.redBright("Write with chalk"));
+console.log(chalk.bgYellow.green.bold("Write with chalk"));

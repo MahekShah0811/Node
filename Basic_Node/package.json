@@ -1,0 +1,27 @@
+{
+  "name": "node",
+  "version": "0.0.1",
+  "description": "node basic and npm understanding",
+  "homepage": "https://github.com/MahekShah0811/Node-Lesson#readme",
+  "bugs": {
+    "url": "https://github.com/MahekShah0811/Node-Lesson/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MahekShah0811/Node-Lesson.git"
+  },
+  "license": "ISC",
+  "author": "mahek",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2"
+  },
+  "devDependencies": {
+    "axios": "^1.14.0"
+  }
+}
