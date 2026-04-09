@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userModel = require("./models/user_model");
 const postModel = require("./models/post_model");
+const path = require("path");
+const upload = require("./config/multer");
 
 const app = express();
 
@@ -11,6 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ express: true }));
 
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.set("view engine", "ejs");
 
@@ -35,6 +39,12 @@ app.get("/profile", auth, async (req, res) => {
 app.get("/post", (req, res) => {
     res.render("post");
 });
+
+app.get("/editprofile", auth, async (req, res) => {
+    let user = await userModel.findOne({ email: req.user.email });
+    res.render("editprofile", { user });
+});
+
 
 // back-end logic + database
 // signup user => create a new user
@@ -84,14 +94,17 @@ app.get("/logout", (req, res) => {
 });
 
 // create post
-app.post("/post", auth, async (req, res) => {
+app.post("/post", auth, upload.single("imgurl"), async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });
-    let { title, description, imgurl } = req.body;
+    let { title, description } = req.body;
+
+    console.log(req.file)
+
     let createdPost = await postModel.create({
         userId: user._id,
         title,
         description,
-        imgurl 
+        imgurl: req.file.filename 
     });
 
     // add (push) posts into user data
@@ -99,6 +112,32 @@ app.post("/post", auth, async (req, res) => {
     await user.save();
     res.redirect("/profile");
 
+});
+
+// edit profile
+app.post("/edit", auth, async (req, res) => {
+    let { fullanme, username, email, phone, image } = req.body;
+    await userModel.findOneAndUpdate(
+        { email: req.user.email }, 
+        {
+            fullanme, 
+            username, 
+            email, 
+            phone, 
+            image
+        }, 
+        { new: true }
+    );
+    res.redirect("/profile");
+});
+
+app.get("/delete/:id", auth, async (req, res) => {
+    let user = await userModel.findOne({ email: req.user.email });
+    await postModel.findOneAndDelete({ _id: req.params.id });
+    let postNumber = user.posts.indexOf(req.params.id);
+    user.posts.splice(postNumber, 1);
+    await user.save();
+    res.redirect("/profile");
 });
 
 // Middleware : always written in the bottom of all routes, and use to stop open the pages by writing the link
