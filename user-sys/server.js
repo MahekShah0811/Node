@@ -6,6 +6,7 @@ const userModel = require("./models/user_model");
 const postModel = require("./models/post_model");
 const path = require("path");
 const upload = require("./config/multer");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ express: true }));
 
 app.use(cookieParser());
+app.use(morgan("dev"));
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -32,7 +34,6 @@ app.get("/profile", auth, async (req, res) => {
     let user = await userModel
     .findOne({ email: req.user.email })
     .populate("posts");
-    console.log(user);
     res.render("profile", { user });
 });
 
