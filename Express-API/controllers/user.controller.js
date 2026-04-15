@@ -39,7 +39,7 @@ module.exports.loginUser = async (req, res) => {
     let checkUser = await userModel.findOne({ email: email }).select("+password");
 
     if(!checkUser){
-        return res.status(401).json({ message: "Email is Invalid!!" });
+        return res.status(401).json({ message: "User Is Not Exists!!" });
     }
 
     const isMatch = await checkUser.comparePassword(password);
@@ -56,3 +56,8 @@ module.exports.loginUser = async (req, res) => {
 module.exports.profile = (req, res) => {
     res.status(200).json({ user: req.user });
 };
+
+module.exports.logout = (req,res)=>{
+    res.clearCookie("token");
+    res.status(200).json({message: "User Logout Successfully !!"})
+}

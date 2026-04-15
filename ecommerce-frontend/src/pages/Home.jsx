@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center text-center px-4">
+    <>
+     <div className="w-full h-screen flex flex-col items-center justify-center text-center px-4">
       <h1 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter">
         DESIGN <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">FASTER.</span>
       </h1>
@@ -12,11 +13,14 @@ const Home = () => {
       </p>
       <Link to="/login">
         <button className="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-indigo-400 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
-          Get Started — Login Now!!
+          Get Started — It's Free
         </button>
       </Link>
     </div>
-  );
-};
+        
+    
+    </>
+  )
+}
 
 export default Home
