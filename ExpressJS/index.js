@@ -31,13 +31,6 @@ app.get('/login', (req, res) => {
     res.sendFile(FilePath);
 });
 
-// error handling :
-// Always write after all route bcz it will catch all the errors that are not handled by the previous routes
-app.use((req, res) => {
-    res.status(404).send('Page Not Found ❌');
-    res.status(500).send('Something Went Wrong 😕');
-});
-
 app.get('/signup', (req, res) => {
     res.send('╰(*°▽°*)╯ This is the Signup Page!!');
 });
@@ -48,4 +41,11 @@ app.get('/profile', (req, res) => {
 
 app.listen(4000, () => {
     console.log('🔺 Server is running on port localhost:4000');
+});
+
+// error handling :
+// Always write after all route bcz it will catch all the errors that are not handled by the previous routes
+app.use((req, res) => {
+    res.status(404).send('Page Not Found ❌');
+    res.status(500).send('Something Went Wrong 😕');
 });
