@@ -17,13 +17,16 @@ router.post("/add", userMiddleware.authUser, adminMiddleware.authAdmin, productC
 // authUser => it checks user is logged in or not => if logged in then => req.user(we get)
 // authAdmin => req.user => checks role => admin or not => if admin then jump to next router
 
-// single product
-router.get("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.singleProduct);
-
 // all product
 router.get("/all", userMiddleware.authUser, adminMiddleware.authAdmin, productController.allProduct);
 
+// single product
+router.get("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.singleProduct);
+
 // update product
-router.put("/:id", userMiddleware.authUser, adminMiddleware.authAdmin);
+router.put("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.updateProduct);
+
+// delete product
+router.delete("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.deleteProduct);
 
 module.exports = router;

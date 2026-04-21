@@ -21,15 +21,15 @@ module.exports.createProduct = async ({ name, description, stock, price, discoun
     return product;
 };
 
+// all product
+module.exports.AllProduct = async () => {
+    return await productModel.find();
+};
+
 // get single product
 module.exports.singleProduct = async (id) => {
     const product = await productModel.findOne({ _id: id });
     return product;
-};
-
-// all product
-module.exports.AllProduct = async () => {
-    return await productModel.find();
 };
 
 // update product
@@ -70,3 +70,9 @@ module.exports.updateProduct = async (
     }
     return updatedProduct;
 };
+
+// delete product
+module.exports.deleteProduct = async (id) => {
+    return await productModel.findOneAndDelete({ _id: id });
+};
+

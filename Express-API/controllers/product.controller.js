@@ -37,6 +37,19 @@ module.exports.createProduct = async (req, res) => {
     return res.status(200).json({ message: "Product Added Sucessfully!!", product });
 };
 
+// all products
+module.exports.allProduct = async (req, res) => {
+    try {
+        const products = await productService.AllProduct();
+        if(!products){
+            return res.status(404).json({ message: "Products Are Not Found!!" });
+        }
+        return res.status(200).json({ message: "Fetch All Products", products });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+};
+
 // add single product
 module.exports.singleProduct = async (req, res) => {
     try {
@@ -50,14 +63,49 @@ module.exports.singleProduct = async (req, res) => {
     }
 };
 
-// all products
-module.exports.allProduct = async (req, res) => {
+// update product
+module.exports.updateProduct = async (req, res) => {
+    const productId = req.params.id;
+    const {
+        name, 
+        description, 
+        stock, 
+        price, 
+        discount, 
+        isNewProduct, 
+        sku, 
+        images, 
+        brand, 
+        category 
+    } = req.body;
+
+    const updatedProduct = await productService.updateProduct({ 
+        productId,
+        name, 
+        description, 
+        stock, 
+        price, 
+        discount, 
+        isNewProduct, 
+        sku, 
+        images, 
+        brand, 
+        category 
+     });
+
+     return res.status(200).json({ message: "User Updated Sucessfully!!", updatedProduct });
+};
+
+// delete product
+module.exports.deleteProduct = async (req, res) => {
     try {
-        const products = await productService.AllProduct();
-        if(!products){
-            return res.status(404).json({ message: "Products Are Not Found!!" });
+        const productId = req.params.id;
+        const deletedProduct = await productService.deleteProduct(productId);
+        if(!deletedProduct){
+            return res.status(404).json({ message: "Product Not Found!!" });
         }
-        return res.status(200).json({ message: "Fetch All Products", products });
+        return res.status(200).json({ message: "Product Deleted Sucessfully!!" });
+
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
