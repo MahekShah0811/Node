@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/web/v1/user.route");
 const adminRouter = require("./routes/web/v1/admin.route");
 const productRouter = require("./routes/web/v1/product.route");
+const chatRouter = require("./routes/web/v1/chat.route");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter); // => localhost:3005/user/register
 app.use("/admin", adminRouter); // => url/admin/all/user
 app.use("/product", productRouter);
+app.use("/bot", chatRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

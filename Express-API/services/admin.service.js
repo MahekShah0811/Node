@@ -13,11 +13,10 @@ module.exports.deleteUser = async (id) => {
     return user;
 }
 
-// manager created
-module.exports.createManager = async ({ username, email, password, role }) => {
-    if(!username || !email || !password){
-        throw new Error("All Field Are Required!!")
-    }
-    const user = await userModel.create({ username, email, password, role: "manager" });
-    return user;
-};
+//update role
+module.exports.updateUserRole = async ({userId, role}) =>{
+    return await userModel.findOneAndUpdate(
+        {_id: userId},
+         {role}, 
+         {new: true})
+}

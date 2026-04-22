@@ -43,4 +43,6 @@ router.put("/update",
     userController.updateUser
 );
 
+router.post("/forget-password", middleware.authUser);
+
 module.exports = router;

@@ -15,16 +15,9 @@ router.get("/all/user" ,usermiddleware.authUser, middleware.authAdmin , adminCon
 // delete user
 router.delete("/user/:id", usermiddleware.authUser, middleware.authAdmin, adminController.deleteUser)
 
+// update role -- create manager
+//router -- service -- controller -- call into router
+router.put("/user/:id/role", usermiddleware.authUser, middleware.authAdmin, adminController.updateUserRole);
 
-// manager creation
-router.post("/manager/create", [
-        body("username").isLength({ min: 4 }).withMessage("Username must be of 4 Charcter!!"),
-        body("email").isEmail().withMessage("Enter Valid Email!!"),
-        body("password").isLength({ min: 6 }).withMessage("Password must be of 6 Character!!"),
-    ],
-    usermiddleware.authUser, 
-    middleware.authAdmin,
-    adminController.registerManager
-);
 
 module.exports = router;
