@@ -43,6 +43,10 @@ router.put("/update",
     userController.updateUser
 );
 
-router.post("/forget-password", middleware.authUser);
+// forget password
+router.post("/forget-password", userController.forgetPassword);
+
+// reset password
+router.post("/reset-password/:token", userController.resetPassword);
 
 module.exports = router;
