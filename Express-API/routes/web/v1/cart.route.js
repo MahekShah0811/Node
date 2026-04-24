@@ -9,10 +9,10 @@ const cartController = require("../../../controllers/cart.controller");
 router.post("/add", userMiddleware.authUser, cartController.AddToCart);
 
 //get all items
+router.get("/all", userMiddleware.authUser, cartController.GetCart);
 
-
-//remove items
-
+//remove single items from cart
+router.delete("/product/:id", userMiddleware.authUser, cartController.RemoveItem);
 
 
 module.exports = router;
