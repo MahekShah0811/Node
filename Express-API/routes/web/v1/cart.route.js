@@ -11,8 +11,10 @@ router.post("/add", userMiddleware.authUser, cartController.AddToCart);
 //get all items
 router.get("/all", userMiddleware.authUser, cartController.GetCart);
 
-//remove single items from cart
+// remove single items from cart
 router.delete("/product/:id", userMiddleware.authUser, cartController.RemoveItem);
+
+// empty cart
 
 
 module.exports = router;
