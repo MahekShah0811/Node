@@ -15,3 +15,16 @@ module.exports.AddToWishlist = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 }
+
+module.exports.RemoveFromWishlist = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const productId = req.params.id;
+
+        const wishlist = await wishlistService.RemoveItem({ userId, productId });
+
+        res.status(200).json({ message: "Removed from wishlist", wishlist });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};

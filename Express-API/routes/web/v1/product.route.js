@@ -29,4 +29,6 @@ router.put("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productCo
 // delete product
 router.delete("/:id", userMiddleware.authUser, adminMiddleware.authAdmin, productController.deleteProduct);
 
+router.get("/filter", productController.filterProducts);
+
 module.exports = router;

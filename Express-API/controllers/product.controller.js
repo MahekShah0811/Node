@@ -110,3 +110,27 @@ module.exports.deleteProduct = async (req, res) => {
         return res.status(400).json({ message: error.message });
     }
 };
+
+module.exports.filterProducts = async (req, res) => {
+    try {
+        const { category, minPrice, maxPrice, search } = req.query;
+
+        let query = {};
+
+        if (category) query.category = category;
+
+        if (minPrice && maxPrice) {
+            query.price = { $gte: minPrice, $lte: maxPrice };
+        }
+
+        if (search) {
+            query.name = { $regex: search, $options: "i" };
+        }
+
+        const products = await productModel.find(query);
+
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};

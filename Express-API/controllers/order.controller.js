@@ -35,3 +35,16 @@ module.exports.GetOrder = async (req, res) =>{
          return res.status(400).json({message: error.message});
     }
 }
+
+module.exports.updateOrderStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const orderId = req.params.id;
+
+        const order = await orderService.updateStatus({ orderId, status });
+
+        res.status(200).json({ message: "Order updated", order });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};

@@ -1,43 +1,47 @@
 const orderModel = require("../models/order.model");
 const productModel = require("../models/product.model");
 
-// Create order
+module.exports.CreateOrder = async ({ userId, items }) => {
+    let totalAmount = 0;
+    let orderItems = [];
 
-module.exports.CreateOrder = async ({userId, items}) => {
+    for (let item of items) {
+        const product = await productModel.findById(item.productId);
 
-        let totalAmount = 0;
-        let orderItems = [];
+        if (!product) throw new Error("Product Not Found");
 
-
-        for(let item of items){
-            console.log(item);
-            const productId = item.productId;
-            const product = await productModel.findOne({_id: productId})
-
-            if(!product)  throw new Error ("Product Not Found..");
-            
-            const itemsTotal = product.price * item.quantity;
-
-            totalAmount += itemsTotal;
-
-            orderItems.push(
-                { 
-                    productId: product._id,
-                    quantity: item.quantity,
-                    price: product.price,
-                    total: itemsTotal
-                });
+        // ❗ CHECK STOCK
+        if (product.stock < item.quantity) {
+            throw new Error(`${product.name} is out of stock`);
         }
 
-        return await orderModel.create({
-            userId, 
-            items: orderItems,
-            totalbill: totalAmount,
+        // ✅ DEDUCT STOCK
+        product.stock -= item.quantity;
+        await product.save();
+
+        const itemTotal = product.price * item.quantity;
+        totalAmount += itemTotal;
+
+        orderItems.push({
+            productId: product._id,
+            quantity: item.quantity,
+            price: product.price,
+            total: itemTotal
         });
-}
+    }
 
+    return await orderModel.create({
+        userId,
+        items: orderItems,
+        totalbill: totalAmount,
+        status: "pending"
+    });
+};
 
-//get order history
-module.exports.GetOrder = async (userId) =>{
-    return await orderModel.findOne({ userId });
-}
+module.exports.updateStatus = async ({ orderId, status }) => {
+    return await orderModel.findByIdAndUpdate(
+        orderId,
+        { status },
+        { new: true }
+    );
+};

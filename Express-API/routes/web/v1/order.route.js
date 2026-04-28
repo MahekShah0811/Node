@@ -9,9 +9,8 @@ router.post("/add", userMiddleware.authUser, orderController.CreateOrder);
 // get order - show history or current order
 router.get("/all", userMiddleware.authUser, orderController.GetOrder);
 
-// remove item from order
-
-// cancel order
-
+// stock
+router.put("/:id/status",
+    userMiddleware.authUser, orderController.updateOrderStatus);
 
 module.exports = router;

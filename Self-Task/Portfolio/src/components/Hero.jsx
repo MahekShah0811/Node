@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 const Hero = () => {
   return (
     // Reduced min-h and pb-10 to pull the About section up
-    <section id="home" className="min-h-[85vh] flex items-center justify-center px-6 md:px-20 bg-slate-50 dark:bg-[#050505] pt-24 pb-10 overflow-hidden relative">
-      
+    <section id="home" className="min-h-[85vh] w-full flex items-center justify-center px-6 md:px-20 bg-slate-50 dark:bg-[#050505] pt-24 pb-10 overflow-x-hidden relative">
       {/* Background Blurs */}
       <div className="absolute top-20 left-10 w-48 h-48 md:w-64 md:h-64 bg-emerald-400/10 rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-10 w-60 h-60 md:w-80 md:h-80 bg-cyan-400/10 rounded-full blur-3xl" />
@@ -54,25 +53,34 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Profile Image */}
-        <motion.div 
-          className="order-1 lg:order-2 flex justify-center lg:justify-end"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <div className="relative group max-w-[260px] md:max-w-[320px]">
-            <div className="relative z-10 overflow-hidden rounded-[2.5rem] border-[6px] md:border-[10px] border-white dark:border-slate-800 shadow-xl">
-              <img
-                src="https://pixaii.com/files/preview/960x960/11759820975qmxzsuv4b2hri3ckcazglamdz0rs9mmwyjrvxt07bgn67jclqkpxxrykb9imkyucm1xk3f1ocwzu7h7mnevlpbdum7tnrbexmg7y.jpg"
-                alt="Mahek"
-                className="w-full aspect-[4/5] object-cover"
-              />
-            </div>
-            <div className="hidden sm:block absolute -bottom-4 -right-4 w-16 h-16 bg-cyan-500 rounded-2xl -z-0 rotate-12" />
-            <div className="hidden sm:block absolute -top-4 -left-4 w-12 h-12 border-4 border-emerald-400 rounded-full -z-0" />
-          </div>
-        </motion.div>
+{/* Profile Image */}
+<motion.div 
+  className="order-1 lg:order-2 flex justify-center lg:justify-end"
+  initial={{ opacity: 0, scale: 0.9 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 1 }}
+>
+  <div className="relative group max-w-[260px] md:max-w-[320px]">
+    <div className="relative z-10 overflow-hidden rounded-[2.5rem] border-[6px] md:border-[10px] border-white dark:border-slate-800 shadow-xl">
+      <img
+        src="https://pixaii.com/files/preview/960x960/11759820975qmxzsuv4b2hri3ckcazglamdz0rs9mmwyjrvxt07bgn67jclqkpxxrykb9imkyucm1xk3f1ocwzu7h7mnevlpbdum7tnrbexmg7y.jpg"
+        alt="Mahek"
+        className="w-full aspect-[4/5] object-cover"
+      />
+    </div>
+    
+    {/* Decorative Cyan Square - Now visible on mobile */}
+    {/* Removed: hidden sm:block */}
+    {/* Added: block */}
+    <div className="block absolute -bottom-4 -right-4 w-16 h-16 bg-cyan-500 rounded-2xl -z-0 rotate-12" />
+    
+    {/* Decorative Emerald Circle - Now visible on mobile */}
+    {/* Removed: hidden sm:block */}
+    {/* Added: block */}
+    <div className="block absolute -top-4 -left-4 w-12 h-12 border-4 border-emerald-400 rounded-full -z-0" />
+    
+  </div>
+</motion.div>
       </div>
     </section>
   );
