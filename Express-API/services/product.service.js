@@ -75,4 +75,3 @@ module.exports.updateProduct = async (
 module.exports.deleteProduct = async (id) => {
     return await productModel.findOneAndDelete({ _id: id });
 };
-
