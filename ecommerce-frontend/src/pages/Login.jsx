@@ -18,14 +18,13 @@ export default function Login() {
         userdata
       );
 
+      // inside submitForm function in Login.jsx[cite: 2]
       if (response.status === 200) {
         const data = response.data;
-
-        // ✅ STORE TOKEN + USER (IMPORTANT)
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.checkUser));
 
-        navigate("/profile");
+        navigate("/home"); // Redirect to home page[cite: 2]
         setError([]);
       }
 
