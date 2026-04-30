@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 
 const WishlistSchema = mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    productIds:[
+    // Simplified: Array of objects, each containing a productId[cite: 1]
+    productIds: [
         {
-            items:{
-                productId: {
-                    type:mongoose.Schema.Types.ObjectId,
-                    ref: "product"
-                }
+            productId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "product" // Ensure this matches your Product model name exactly[cite: 1]
             }
         }
     ]

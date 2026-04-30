@@ -28,3 +28,22 @@ module.exports.RemoveFromWishlist = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+module.exports.GetWishlist = async (req, res) => {
+    try {
+        // Ensure this matches your middleware (req.user._id or req.user.id)[cite: 1, 2]
+        const userId = req.user._id || req.user.id; 
+        
+        const wishlist = await wishlistService.GetWishlist({ userId });
+        
+        // If wishlist doesn't exist yet, return an empty array instead of an error
+        if (!wishlist) {
+            return res.status(200).json({ wishlist: { productIds: [] } });
+        }
+
+        return res.status(200).json({ wishlist });
+    } catch (error) {
+        console.log("Backend Error:", error.message); // This helps you debug
+        return res.status(400).json({ message: error.message });
+    }
+};
