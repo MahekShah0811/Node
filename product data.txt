@@ -1,0 +1,135 @@
+{
+  "name": "Portable Bluetooth Speaker",
+  "description": "Compact speaker with powerful bass, waterproof design, and 10-hour battery life.",
+  "stock": 220,
+  "price": 39.99,
+  "discount": 7,
+  "isNewProduct": false,
+  "sku": "ELE-103-SPK",
+  "images": [
+    "https://i.pinimg.com/1200x/aa/bb/cc/aabbccddeeff00112233445566778899.jpg"
+  ],
+  "brand": "BeatBox",
+  "category": "Electronics"
+}
+
+
+
+{
+  "name": "Men's Slim Fit T-Shirt",
+  "description": "Comfortable cotton t-shirt with a modern slim fit design.",
+  "stock": 300,
+  "price": 19.99,
+  "discount": 5,
+  "isNewProduct": false,
+  "sku": "FSH-212-TSH",
+  "images": [
+    "https://i.pinimg.com/1200x/56/78/90/567890abcdef1234567890abcdef1234.jpg"
+  ],
+  "brand": "TrendWear",
+  "category": "Fashion"
+}
+
+
+
+{
+  "name": "Wooden Bookshelf",
+  "description": "Spacious bookshelf with multiple tiers for storage and display.",
+  "stock": 60,
+  "price": 179.99,
+  "discount": 10,
+  "isNewProduct": false,
+  "sku": "FUR-332-BSH",
+  "images": [
+    "https://i.pinimg.com/1200x/77/88/99/77889900aabbccddeeff112233445566.jpg"
+  ],
+  "brand": "WoodCraft",
+  "category": "Furniture"
+}
+
+
+
+
+{
+  "name": "Digital Wrist Watch",
+  "description": "Water-resistant digital watch with multiple sports modes.",
+  "stock": 140,
+  "price": 44.99,
+  "discount": 9,
+  "isNewProduct": false,
+  "sku": "ACC-412-WAT",
+  "images": [
+    "https://i.pinimg.com/1200x/cc/dd/ee/ccddeeff00112233445566778899aabb.jpg"
+  ],
+  "brand": "TimeGear",
+  "category": "Accessories"
+}
+
+
+
+{
+  "name": "Knife Set with Stand",
+  "description": "Premium stainless steel knife set with ergonomic handles and wooden stand.",
+  "stock": 90,
+  "price": 59.99,
+  "discount": 14,
+  "isNewProduct": false,
+  "sku": "KIT-522-KNF",
+  "images": [
+    "https://i.pinimg.com/1200x/11/aa/22/11aa22bb33cc44dd55ee6677889900ff.jpg"
+  ],
+  "brand": "SharpEdge",
+  "category": "Kitchen"
+}
+
+
+
+{
+  "name": "Matte Lipstick Set",
+  "description": "Long-lasting matte lipsticks available in a pack of 5 vibrant shades.",
+  "stock": 160,
+  "price": 24.99,
+  "discount": 11,
+  "isNewProduct": true,
+  "sku": "BEA-632-LIP",
+  "images": [
+    "https://i.pinimg.com/1200x/33/cc/44/33cc44dd55ee66ff77889900aabbccdd.jpg"
+  ],
+  "brand": "GlamKit",
+  "category": "Beauty"
+}
+
+
+
+
+{
+  "name": "Whole Wheat Flour",
+  "description": "High-quality whole wheat flour ideal for daily cooking needs.",
+  "stock": 450,
+  "price": 7.99,
+  "discount": 2,
+  "isNewProduct": false,
+  "sku": "GRC-742-WHF",
+  "images": [
+    "https://i.pinimg.com/1200x/55/ee/66/55ee66ff77889900aabbccddeeff0011.jpg"
+  ],
+  "brand": "FarmFresh",
+  "category": "Groceries"
+}
+
+
+
+{
+  "name": "Unisex Body Mist",
+  "description": "Refreshing body mist suitable for all-day use with mild fragrance.",
+  "stock": 190,
+  "price": 14.99,
+  "discount": 6,
+  "isNewProduct": false,
+  "sku": "FRG-852-BMT",
+  "images": [
+    "https://i.pinimg.com/1200x/77/00/88/77008899aabbccddeeff001122334455.jpg"
+  ],
+  "brand": "FreshAura",
+  "category": "Fragrance"
+}

@@ -6,20 +6,23 @@ const About = () => {
   return (
     <div className="relative pt-24 pb-16 px-6 text-white max-w-7xl mx-auto space-y-32">
       
-      {/* 1. Who We Are */}
-      <section className="text-center space-y-8">
-        <div className="space-y-4">
-          <h1 className="text-5xl font-bold tracking-tight">
+      {/* 1. Styled Header Section */}
+      <section className="text-center">
+        <h1 className="text-5xl font-black mb-10 tracking-tighter uppercase">
+          ABOUT <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">US</span>
+        </h1>
+        <div className="space-y-8">
+          <h2 className="text-3xl font-bold tracking-tight">
             Hi, we are <span className="text-indigo-400">My Store</span>
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
+          </h2>
+          <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">
             Based in the heart of Gujarat, My Store is a curated digital marketplace 
             dedicated to bringing premium tech and lifestyle essentials to the 
             modern professional.
           </p>
         </div>
         
-        <div className="w-full aspect-[21/9] bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-md relative shadow-2xl">
+        <div className="mt-12 w-full aspect-[21/9] bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-md relative shadow-2xl">
           <img 
             src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=2000" 
             alt="My Store Team" 
@@ -48,13 +51,13 @@ const About = () => {
             modern design. We spent our inaugural year in a state of constant 
             refinement, perfecting the equilibrium between high-end aesthetic appeal 
             and industrial-grade functional performance. At My Store, we don't 
-            just ship products; we deliver a engineered shopping experience that 
+            just ship products; we deliver an engineered shopping experience that 
             values your time and your taste.
           </p>
         </div>
       </section>
 
-      {/* 3. Why Us (With Popup Trigger) */}
+      {/* 3. Why Us */}
       <section className="grid md:grid-cols-2 gap-16 items-center">
         <div className="space-y-6">
           <h2 className="text-3xl font-semibold border-b-2 border-indigo-500 w-fit pb-2 text-indigo-400">Why Us?</h2>
@@ -62,10 +65,10 @@ const About = () => {
           <p className="text-gray-400 leading-relaxed">
             At My Store, we view the marketplace as a curated gallery of experiences rather than 
             a warehouse of goods. We believe that every object you bring into your life should 
-            serve a purpose and inspire excellence. When you shop with us, you aren't just a 
-            customer—you are a vital part of a global community that rejects the noise of mass 
-            production in favor of the signal of true craftsmanship. We stand firmly for 
-            **quality over quantity**, ensuring every purchase is a lasting investment in your lifestyle.
+            serve a purpose and inspire excellence. When you shop with us, you are a vital part 
+            of a global community that rejects the noise of mass production in favor of the signal of 
+            true craftsmanship. We stand firmly for **quality over quantity**, ensuring 
+            every purchase is a lasting investment in your lifestyle.
           </p>
           <button 
             onClick={() => setShowModal(true)}
@@ -88,12 +91,11 @@ const About = () => {
       {/* 4. Features Section */}
       <section className="space-y-12">
         <div className="text-center space-y-2">
-          <h2 className="text-4xl font-bold tracking-tight">The #MyStore Experience</h2>
+          <h2 className="text-4xl font-bold tracking-tight text-white">The #MyStore Experience</h2>
           <div className="w-16 h-1 bg-indigo-500 mx-auto"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[220px]">
-          {/* 1. Express Delivery */}
           <div className="md:col-span-2 bg-[#0a0a0a] border-t-2 border-indigo-500 rounded-2xl p-8 flex flex-col justify-center transition-all duration-300 hover:bg-[#111] hover:shadow-[0_0_30px_-10px_rgba(99,102,241,0.3)]">
             <h4 className="text-2xl font-bold mb-2 text-white">Express Delivery</h4>
             <p className="text-gray-500 font-medium leading-relaxed">
@@ -101,13 +103,11 @@ const About = () => {
             </p>
           </div>
 
-          {/* 2. 24/7 */}
           <div className="bg-indigo-600 rounded-2xl p-8 flex flex-col justify-center items-center text-center shadow-lg shadow-indigo-900/20 transform hover:-translate-y-1 transition">
             <h4 className="text-5xl font-black text-white mb-2 italic">24/7</h4>
             <p className="text-indigo-100 font-bold uppercase tracking-tighter text-sm">Expert Support</p>
           </div>
 
-          {/* 3. Verified Quality */}
           <div className="bg-transparent border-2 border-zinc-800 rounded-2xl p-8 flex flex-col justify-center group hover:border-indigo-400 transition-colors">
             <h4 className="text-xl font-bold mb-2 text-indigo-400 group-hover:text-white">Verified Quality</h4>
             <p className="text-gray-500 group-hover:text-gray-400">
@@ -115,26 +115,21 @@ const About = () => {
             </p>
           </div>
 
-          {/* 4. Secure Checkout */}
           <div className="md:col-span-2 bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-8 flex items-center justify-between relative overflow-hidden group">
             <div className="z-10">
               <h4 className="text-2xl font-bold mb-2 text-white">Secure Checkout</h4>
-              <p className="text-gray-500">Industry-standard encryption for all payments.</p>
+              <p className="text-gray-500 font-medium">Industry-standard encryption for all payments.</p>
             </div>
             <div className="absolute right-0 bottom-0 w-32 h-32 bg-indigo-600/10 rotate-45 translate-x-10 translate-y-10 group-hover:bg-indigo-600/20 transition-all duration-500"></div>
           </div>
         </div>
       </section>
 
-      {/* Popup Box */}
+      {/* --- Community Popup Box --- */}
       {showModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setShowModal(false)}
-          ></div>
-          
-          <div className="relative bg-white/10 border border-white/20 backdrop-blur-2xl p-10 rounded-[2.5rem] max-w-md w-full shadow-2xl text-center transform transition-all animate-in zoom-in duration-300">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowModal(false)}></div>
+          <div className="relative bg-white/10 border border-white/20 backdrop-blur-2xl p-10 rounded-[2.5rem] max-w-md w-full shadow-2xl text-center animate-in zoom-in duration-300">
             <div className="w-20 h-20 bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-4xl">🚀</span>
             </div>
