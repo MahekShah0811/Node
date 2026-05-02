@@ -14,6 +14,9 @@ router.get("/all", userMiddleware.authUser, cartController.GetCart);
 // remove single items from cart
 router.delete("/product/:id", userMiddleware.authUser, cartController.RemoveItem);
 
+// update cart
+router.put("/update-quantity", userMiddleware.authUser, cartController.UpdateQuantity);
+
 // empty cart
 
 

@@ -10,10 +10,10 @@ import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import Wishlist from "./pages/Wishlist";
 import Admin from "./pages/Admin";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -55,7 +55,7 @@ const App = () => {
         <Route path="/product/:id" element={<PrivateRoute><ProductDetail /></PrivateRoute>} />
         <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
         <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
-        <Route path="/wishlist" element={<PrivateRoute><Wishlist /></PrivateRoute>} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
         
         {/* Admin Dashboard */}
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />

@@ -1,7 +1,7 @@
 import { useState } from "react"; 
 import { Link, useNavigate } from "react-router-dom";
-// 1. Added 'Heart' to the icon imports
-import { ShoppingCart, User, LogOut, Menu, X, Heart } from "lucide-react"; 
+// Removed 'Heart' from the icon imports
+import { ShoppingCart, User, LogOut, Menu, X } from "lucide-react"; 
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false); 
@@ -47,10 +47,7 @@ export default function Navbar() {
                 </span>
               </div>
 
-              {/* 2. Added Wishlist Link/Icon for Desktop */}
-              <Link to="/wishlist" title="Wishlist" className="hover:text-indigo-400 transition duration-300">
-                <Heart size={20} />
-              </Link>
+              {/* Wishlist Link/Icon removed from Desktop */}
 
               <Link to="/cart" title="Cart" className="hover:text-indigo-400 transition duration-300">
                 <ShoppingCart size={20} />
@@ -104,10 +101,7 @@ export default function Navbar() {
               <>
                 <p className="text-indigo-300 font-bold">Hello, {user.username}</p>
                 
-                {/* 3. Added Wishlist Link/Icon for Mobile */}
-                <Link to="/wishlist" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
-                  <Heart size={20} /> Wishlist
-                </Link>
+                {/* Wishlist Link/Icon removed from Mobile */}
 
                 <Link to="/cart" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
                   <ShoppingCart size={20} /> Cart

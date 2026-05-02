@@ -1,25 +1,33 @@
 const wishlistModel = require("../models/wishlist.model");
 
-// Add Item: Clean push matching the schema
 module.exports.AddToWishlist = async ({ userId, productId }) => {
     let wishlist = await wishlistModel.findOne({ userId });
     if (!wishlist) {
         wishlist = new wishlistModel({ userId, productIds: [] });
     }
 
-    const exists = wishlist.productIds.some(item => item.productId.toString() === productId);
+    // Safety check: Ensure item and item.productId exist before calling toString()
+    const exists = wishlist.productIds.some(item => 
+        item.productId && item.productId.toString() === productId
+    );
+    
     if (exists) throw new Error("Product already in wishlist");
 
-    // Matches schema: { productId: ... }
+    // Matches your schema: productIds: [{ productId: ... }]
     wishlist.productIds.push({ productId }); 
-    return await wishlist.save();
+    await wishlist.save();
+
+    return await wishlist.populate({
+        path: 'productIds.productId',
+        model: 'product'
+    });
 };
 
-// Get Wishlist with the CORRECT path
 module.exports.GetWishlist = async ({ userId }) => {
+    // Populate the field 'productId' inside the 'productIds' array
     return await wishlistModel.findOne({ userId })
         .populate({
-            path: 'productIds.productId', // 👈 REMOVED '.items' to match your latest schema
-            model: 'product' 
+            path: 'productIds.productId', 
+            model: 'product' // MUST match the name in mongoose.model("product", ...)
         });
 };

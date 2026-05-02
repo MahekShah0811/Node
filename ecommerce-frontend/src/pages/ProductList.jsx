@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaSearch, FaFilter, FaCheckCircle } from "react-icons/fa";
+import { FaSearch, FaFilter } from "react-icons/fa"; // Removed FaHeart
 
 export default function ProductList() {
   const navigate = useNavigate();
@@ -38,20 +38,6 @@ export default function ProductList() {
     setFilteredProducts(result);
   }, [searchTerm, selectedCategory, products]);
 
-  // 3. Wishlist Logic
-  const addToWishlist = async (productId) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/wishlist/add`, 
-        { productId }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("Added to Wishlist!");
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to add to wishlist");
-    }
-  };
-
   const categories = ["All", ...new Set(products.map(p => p.category))];
 
   return (
@@ -63,7 +49,7 @@ export default function ProductList() {
 
       {/* 1. Centered Header */}
       <div className="text-center mb-16 relative z-10">
-        <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tighter uppercase">
+        <h1 className="text-5xl md:text-5xl font-black mb-6 tracking-tighter uppercase">
           EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">PRODUCTS</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -119,14 +105,7 @@ export default function ProductList() {
                   alt={p.name}
                   className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
                 />
-                
-                {/* Wishlist Button */}
-                <button 
-                  onClick={() => addToWishlist(p._id)}
-                  className="absolute top-4 right-4 p-3 bg-black/60 backdrop-blur-md rounded-full text-white hover:text-pink-400 hover:scale-110 transition-all duration-300 z-20 shadow-lg"
-                >
-                  <FaHeart size={18} />
-                </button>
+                {/* Wishlist Button removed from here */}
               </div>
 
               {/* Product Info */}
@@ -141,12 +120,12 @@ export default function ProductList() {
                   </div>
                 </div>
                 
-                {/* Final Navigation Button with Dark Pink Hover */}
+                {/* Final Navigation Button */}
                 <button 
                   onClick={() => navigate(`/product/${p._id}`)}
                   className="w-full mt-2 py-4 bg-gradient-to-r from-indigo-600/10 to-pink-600/10 border border-white/10 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] hover:bg-pink-800 hover:from-pink-800 hover:to-pink-900 hover:text-white hover:border-transparent transition-all duration-500 shadow-xl"
                 >
-                   View Product
+                    View Product
                 </button>
               </div>
             </div>

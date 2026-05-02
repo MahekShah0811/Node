@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"; // Added for navigation
 import { 
   FaSearch, FaFire, FaLaptop, FaTshirt, 
   FaChair, FaHeadphones, FaArrowRight, FaGraduationCap,
-  FaUtensils, FaMagic, FaAppleAlt, FaSprayCan, FaCheckCircle
+  FaUtensils, FaMagic, FaAppleAlt, FaSprayCan, FaCheckCircle, FaExclamationCircle
 } from "react-icons/fa";
 
 const Home = () => {
@@ -15,16 +15,20 @@ const Home = () => {
   const [studentEmail, setStudentEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [timeLeft, setTimeLeft] = useState(3600 * 5 + 45 * 60);
+  // --- NEW STATE FOR SEARCHING CATEGORIES ---
+  const [categorySearch, setCategorySearch] = useState("");
 
-  // 1. Fetch First 4 Products from Database
+  // 1. Fetch First 4 Products (Fixed Data Path)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/product/all", {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/product/all`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setProducts(res.data.slice(0, 4));
+        // Access .products then slice the first 4
+        const data = res.data.products || [];
+        setProducts(data.slice(0, 4));
       } catch (err) {
         console.error("Error fetching featured products:", err);
       }
@@ -32,7 +36,7 @@ const Home = () => {
     fetchProducts();
   }, []);
 
-  // 2. Timer Logic
+  // Timer logic remains the same
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
@@ -40,7 +44,6 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 3. Student Validation Logic
   const handleStudentApply = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!studentEmail) {
@@ -50,8 +53,8 @@ const Home = () => {
     } else {
       setEmailError("");
       setShowStudentModal(false);
-      setShowSuccessModal(true); // Show success popup
-      setStudentEmail(""); // Reset field
+      setShowSuccessModal(true);
+      setStudentEmail("");
     }
   };
 
@@ -62,7 +65,6 @@ const Home = () => {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Expanded Categories (8 total)
   const categories = [
     { name: "Electronics", icon: <FaLaptop />, color: "from-blue-500/20" },
     { name: "Fashion", icon: <FaTshirt />, color: "from-pink-500/20" },
@@ -73,6 +75,11 @@ const Home = () => {
     { name: "Groceries", icon: <FaAppleAlt />, color: "from-red-500/20" },
     { name: "Fragrances", icon: <FaSprayCan />, color: "from-cyan-500/20" },
   ];
+
+  // --- FILTER CATEGORIES BASED ON SEARCH ---
+  const filteredCategories = categories.filter((cat) =>
+    cat.name.toLowerCase().includes(categorySearch.toLowerCase())
+  );
 
   return (
     <div className="pt-24 pb-16 px-6 text-white max-w-7xl mx-auto space-y-20">
@@ -110,33 +117,53 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. SEARCH BAR */}
+      {/* 2. FUNCTIONAL SEARCH BAR */}
       <section className="max-w-3xl mx-auto">
         <div className="relative group">
           <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
           <input 
             type="text" 
-            placeholder="Search for premium products..."
+            value={categorySearch}
+            onChange={(e) => setCategorySearch(e.target.value)}
+            placeholder="Search categories (e.g. Fashion, Electronics)..."
             className="w-full bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl py-6 pl-16 pr-6 focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-white/20 text-lg"
           />
         </div>
       </section>
 
-      {/* 3. CATEGORIES SECTION */}
+      {/* 3. CATEGORIES SECTION (Updated with Filter) */}
       <section>
         <h1 className="text-4xl font-black mb-10 tracking-tighter uppercase">
           BROWSE <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">CATEGORIES</span>
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {categories.map((cat, index) => (
-            <div key={index} className={`bg-gradient-to-br ${cat.color} to-transparent border border-white/5 p-8 rounded-3xl backdrop-blur-sm flex flex-col items-center justify-center gap-4 hover:border-indigo-500/50 transition-all cursor-pointer group`}>
-              <div className="text-4xl text-indigo-400 group-hover:scale-110 transition-transform duration-500">
-                {cat.icon}
+        
+        {filteredCategories.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center animate-in fade-in duration-500">
+            {filteredCategories.map((cat, index) => (
+              <div 
+                key={index} 
+                onClick={() => navigate(`/products?category=${cat.name}`)}
+                className={`bg-gradient-to-br ${cat.color} to-transparent border border-white/5 p-8 rounded-3xl backdrop-blur-sm flex flex-col items-center justify-center gap-4 hover:border-indigo-500/50 transition-all cursor-pointer group`}
+              >
+                <div className="text-4xl text-indigo-400 group-hover:scale-110 transition-transform duration-500">
+                  {cat.icon}
+                </div>
+                <span className="font-bold tracking-widest uppercase text-[10px] text-gray-400">{cat.name}</span>
               </div>
-              <span className="font-bold tracking-widest uppercase text-[10px] text-gray-400">{cat.name}</span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-20 text-center bg-white/5 rounded-[2.5rem] border border-dashed border-white/10">
+            <FaExclamationCircle className="mx-auto text-5xl text-white/20 mb-4" />
+            <p className="text-xl font-bold text-white/40 italic">Category "{categorySearch}" does not exist.</p>
+            <button 
+              onClick={() => setCategorySearch("")} 
+              className="mt-4 text-indigo-400 text-xs font-bold uppercase tracking-widest hover:underline"
+            >
+              Clear Search
+            </button>
+          </div>
+        )}
       </section>
 
       {/* 4. DEALS & OFFERS */}
@@ -155,7 +182,7 @@ const Home = () => {
         <div className="bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-3xl p-10 flex flex-col justify-between group">
           <h2 className="text-2xl font-black uppercase tracking-tighter leading-tight text-white">Student <br />Discount</h2>
           <div className="space-y-4">
-            <p className="text-indigo-200 text-sm">Verify your ID and get an extra 10% off everything at **My Store**.</p>
+            <p className="text-indigo-200 text-sm">Verify your ID and get an extra 10% off everything at My Store.</p>
             <button 
               onClick={() => setShowStudentModal(true)}
               className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white text-black p-4 rounded-xl transition hover:bg-black hover:text-white"
@@ -166,27 +193,55 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. FEATURED PRODUCTS */}
+      {/* 5. EXPLORE PRODUCTS (Updated with Premium Card UI) */}
       <section>
-        <h1 className="text-4xl font-black mb-10 tracking-tighter uppercase">
-          EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">PRODUCTS</span>
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <div key={product._id} className="bg-white/5 border border-white/10 rounded-3xl p-5 group hover:border-indigo-500/50 transition-all duration-500">
-              <div className="aspect-square bg-black/40 rounded-2xl mb-6 overflow-hidden relative">
+        <div className="flex justify-between items-end mb-10">
+            <h1 className="text-4xl font-black tracking-tighter uppercase">
+              EXPLORE <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">PRODUCTS</span>
+            </h1>
+            <button 
+                onClick={() => navigate("/products")}
+                className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 hover:text-pink-400 transition"
+            >
+                View All →
+            </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+          {products.map((p) => (
+            <div key={p._id} className="group relative bg-gradient-to-br from-indigo-500/5 via-transparent to-pink-500/5 border border-white/10 rounded-[2.5rem] p-5 backdrop-blur-md hover:border-indigo-400/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl">
+              
+              {/* Outer Glow on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2.5rem] pointer-events-none"></div>
+
+              {/* Image Container */}
+              <div className="relative aspect-square rounded-[2rem] overflow-hidden mb-6 bg-zinc-900 shadow-2xl">
                 <img 
-                  src={product.images[0] || "https://via.placeholder.com/400"} 
-                  alt={product.name} 
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700"
+                  src={p.images[0] || "https://via.placeholder.com/400"} 
+                  alt={p.name}
+                  className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
                 />
               </div>
-              <div className="space-y-3">
-                <h3 className="font-bold text-white tracking-tight">{product.name}</h3>
-                <div className="flex justify-between items-center">
-                  <span className="text-indigo-400 font-black font-mono text-xl">₹{product.price}</span>
-                  <button className="text-[10px] font-black uppercase tracking-widest bg-white/5 hover:bg-indigo-600 px-4 py-2 rounded-xl transition">Add</button>
+
+              {/* Product Info */}
+              <div className="space-y-4 px-2 relative z-10">
+                <div className="flex justify-between items-start">
+                  <div className="w-full">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-400 font-black mb-1">{p.category}</p>
+                    <div className="flex justify-between items-center gap-2">
+                       <h2 className="text-white font-bold text-lg leading-tight truncate flex-1">{p.name}</h2>
+                       <span className="text-lg font-black font-mono tracking-tighter text-white">₹{p.price}</span>
+                    </div>
+                  </div>
                 </div>
+                
+                {/* Navigation Button */}
+                <button 
+                  onClick={() => navigate(`/product/${p._id}`)}
+                  className="w-full mt-2 py-4 bg-gradient-to-r from-indigo-600/10 to-pink-600/10 border border-white/10 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] hover:bg-pink-800 hover:from-pink-800 hover:to-pink-900 hover:text-white hover:border-transparent transition-all duration-500 shadow-xl"
+                >
+                    View Product
+                </button>
               </div>
             </div>
           ))}
@@ -203,7 +258,7 @@ const Home = () => {
             </div>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white mb-4">Student Access</h2>
             <p className="text-gray-400 mb-8 leading-relaxed">
-              Unlock exclusive pricing for the **My Store** tech community. Verify with your academic email.
+              Unlock exclusive pricing for the My Store tech community. Verify with your academic email.
             </p>
             <div className="space-y-4">
                <div className="text-left">
@@ -237,7 +292,7 @@ const Home = () => {
             </div>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white mb-4">Applied!</h2>
             <p className="text-gray-400 mb-8 leading-relaxed">
-              Success! Your student discount has been applied to your **My Store** account. Enjoy your premium tech.
+              Success! Your student discount has been applied to your My Store account. Enjoy your premium tech.
             </p>
             <button 
               onClick={() => setShowSuccessModal(false)}
