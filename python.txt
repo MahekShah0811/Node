@@ -1,0 +1,60 @@
+📌 JSON ka simple matlab
+
+👉 JSON = JavaScript Object Notation
+👉 Ye ek data ko store aur transfer karne ka format hai
+
+👉 Simple language me:
+“Data ko likhne ka ek standard tarika”
+
+🧠 Real-Life Example
+
+Socho tum ek student ki details likh rahe ho:
+
+Name: Rahul
+Age: 20
+City: Surat
+
+👉 Normal likha:
+
+Name = Rahul
+Age = 20
+City = Surat
+
+👉 JSON me ye aise dikhega:
+
+{
+  "name": "Rahul",
+  "age": 20,
+  "city": "Surat"
+}
+📌 JSON ke Rules (student-friendly)
+Data key : value me hota hai
+Key hamesha "double quotes" me hoti hai
+Values:
+String → "Rahul"
+Number → 20
+{ } ke andar pura data hota hai
+🔥 Easy Samajhne ka Trick
+
+👉 JSON = Dictionary jaisa format (Python me)
+👉 Bas difference:
+
+JSON → text format
+Python dict → programming object
+💻 Code Example (Python)
+import json
+
+x = '{"name":"Rahul","age":20}'
+
+y = json.loads(x)
+
+print(y["name"])
+
+👉 Output: Rahul
+
+🚀 Real-Life Use
+Mobile apps
+Websites
+APIs (data bhejna/lena)
+
+👉 Jab bhi app se data aata hai → mostly JSON me hota hai

@@ -1,7 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaShoppingBag, FaArrowLeft, FaShieldAlt, FaTruck, FaUndo, FaCheck } from "react-icons/fa";
+import { 
+  FaShoppingBag, FaArrowLeft, FaShieldAlt, FaTruck, 
+  FaUndo, FaCheck, FaFingerprint, FaBarcode, FaCube, 
+  FaChevronRight 
+} from "react-icons/fa";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -10,61 +14,56 @@ export default function ProductDetail() {
   const [activeImage, setActiveImage] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
+  // 1. Interactive Spotlight Logic
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setMousePos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // 2. Fetch Data
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
-    // 1. Fetch Product Details
     axios.get(`${import.meta.env.VITE_BASE_URL}/product/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(res => {
-      setProduct(res.data.product);
-    })
-    .catch(err => console.error("Error fetching product details:", err));
+    .then(res => setProduct(res.data.product))
+    .catch(err => console.error("Signal Error:", err));
 
-    // 2. Check if product is already in the cart
     if (token) {
       axios.get(`${import.meta.env.VITE_BASE_URL}/cart/all`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => {
-        // Based on your cart backend, items are usually in res.data.cart.items
         const cartItems = res.data.cart?.items || [];
         const alreadyInCart = cartItems.some(item => 
           (item.productId?._id || item.productId) === id
         );
         setIsAdded(alreadyInCart);
       })
-      .catch(err => console.error("Error checking cart status:", err));
+      .catch(err => console.error("Cart Sync Error:", err));
     }
   }, [id]);
 
   const handleAddToCart = async () => {
-    if (isAdded) return; // Prevent multiple clicks if already added
-
+    if (isAdded) return;
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      
-      if (!token) {
-        alert("Please login first!");
-        return navigate("/login");
-      }
-
-      await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/cart/add`,
+      if (!token) return navigate("/login");
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/cart/add`,
         { productId: id, quantity: 1 }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      // Successfully added to DB, now set permanent local state
-      setIsAdded(true); 
-      // TIMEOUT REMOVED: Button will now stay "ADDED"
-
+      setIsAdded(true);
     } catch (err) {
-      console.error("Cart Error:", err);
-      alert(err.response?.data?.message || "Failed to add to cart");
+      console.error("Transmission Error:", err);
     } finally {
       setLoading(false);
     }
@@ -74,94 +73,148 @@ export default function ProductDetail() {
     navigate("/order-confirmation", { state: { product, directBuy: true } });
   };
 
-  if (!product.name) return <div className="min-h-screen flex items-center justify-center text-indigo-400 font-black animate-pulse uppercase tracking-[0.5em]">Syncing Signal...</div>;
+  if (!product.name) return (
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="text-indigo-400 font-black animate-pulse uppercase tracking-[0.5em] text-xs">
+        Syncing Product...
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6 md:px-10 text-white max-w-7xl mx-auto relative">
-      <div className="absolute top-40 left-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none"></div>
-      <div className="absolute bottom-40 right-0 w-96 h-96 bg-pink-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+    <div 
+      className="min-h-screen bg-black text-white overflow-x-hidden relative"
+      style={{
+        backgroundImage: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(99, 102, 241, 0.15) 0%, transparent 40%)`
+      }}
+    >
+      {/* Background Glows */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[180px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[180px] pointer-events-none"></div>
 
-      <button 
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-12 uppercase text-[10px] font-black tracking-widest group"
-      >
-        <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back 
-      </button>
+      <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto relative z-10">
+        
+        {/* Navigation */}
+        <button 
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all mb-12 group"
+        >
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back
+        </button>
 
-      <div className="grid lg:grid-cols-2 gap-16 relative z-10">
-        <div className="space-y-6">
-          <div className="relative aspect-square bg-indigo-900/10 border border-white/10 rounded-[3rem] overflow-hidden backdrop-blur-xl group shadow-2xl">
-            <img 
-              src={product.images?.[activeImage]} 
-              alt={product.name}
-              className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-            />
-          </div>
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           
-          <div className="flex gap-4">
-            {product.images?.map((img, idx) => (
+          {/* MEDIA SECTION */}
+          <div className="space-y-8">
+            <div className="relative group p-2 bg-white/[0.02] border border-white/10 rounded-[3rem] backdrop-blur-xl shadow-2xl overflow-hidden">
+              <div className="aspect-square rounded-[2.5rem] overflow-hidden relative">
+                <img 
+                  src={product.images?.[activeImage]} 
+                  alt={product.name}
+                  className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
+                />
+              </div>
+            </div>
+            
+            {/* Thumbnails */}
+            <div className="flex gap-4 px-2">
+              {product.images?.map((img, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setActiveImage(idx)}
+                  className={`w-20 h-20 rounded-2xl border-2 transition-all duration-500 overflow-hidden bg-zinc-900 shadow-xl ${
+                    activeImage === idx 
+                    ? 'border-indigo-500 scale-110' 
+                    : 'border-white/5 opacity-40 hover:opacity-100 hover:border-white/20'
+                  }`}
+                >
+                  <img src={img} className="w-full h-full object-cover" alt="Thumbnail" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* CONTENT SECTION */}
+          <div className="space-y-10">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                <FaFingerprint className="text-indigo-400 text-xs" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-300">Verified Product</span>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">{product.brand} // {product.category}</p>
+                <h1 className="text-4xl md:text-5xl font-black tracking-tighter leading-[0.9] uppercase italic">
+                  {product.name.split(' ')[0]} <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                    {product.name.split(' ').slice(1).join(' ')}
+                  </span>
+                </h1>
+              </div>
+
+              <div className="flex items-center gap-4 pt-4">
+                <span className="text-4xl font-black font-mono tracking-tighter text-white">₹{product.price}</span>
+                <div className="h-8 w-[1px] bg-white/10 mx-2"></div>
+                <div className="flex flex-col">
+                  <span className="text-[12px] font-black uppercase text-indigo-400 flex items-center gap-2 italic mb-1">
+                    <FaCube size={10} /> Status : In_Stock
+                  </span>
+                  <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Protocol : Secure_Delivery</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Description / Data Payload */}
+            <div className="p-8 bg-white/[0.02] border border-white/10 rounded-[2rem] backdrop-blur-md space-y-4">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 flex items-center gap-2">
+                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" /> Description
+              </h4>
+              <p className="text-gray-400 leading-relaxed font-medium">
+                {product.description || "Premium engineered lifestyle equipment. High-performance aesthetic design meets industrial durability. Meticulously curated for the modern professional ecosystem."}
+              </p>
+            </div>
+
+            {/* Spec Bento */}
+            <div className="grid grid-cols-3 gap-1 relative group">
+                <div className="absolute inset-0 bg-indigo-500/5 blur-2xl group-hover:bg-indigo-500/10 transition-all"></div>
+                {[
+                  { icon: FaShieldAlt, label: "Security", sub: "Warranty" },
+                  { icon: FaTruck, label: "Express", sub: "Shipping" },
+                  { icon: FaUndo, label: "Verified", sub: "Return" }
+                ].map((spec, i) => (
+                  <div key={i} className="relative z-10 bg-zinc-900/50 border border-white/5 py-8 flex flex-col items-center gap-3 rounded-2xl">
+                    <spec.icon className="text-indigo-400 text-lg" />
+                    <p className="text-[8px] uppercase font-black text-gray-500 tracking-widest leading-none text-center">
+                      {spec.label}<br/>{spec.sub}
+                    </p>
+                  </div>
+                ))}
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <button 
-                key={idx}
-                onClick={() => setActiveImage(idx)}
-                className={`w-24 h-24 rounded-2xl border-2 transition-all overflow-hidden bg-zinc-950 ${activeImage === idx ? 'border-indigo-500 scale-105' : 'border-white/5 opacity-50 hover:opacity-100'}`}
+                disabled={loading || product.stock <= 0}
+                onClick={handleAddToCart}
+                className={`group relative flex-1 py-6 rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] transition-all duration-500 overflow-hidden ${
+                  isAdded 
+                  ? "bg-emerald-600 text-white cursor-default" 
+                  : "bg-white text-black hover:bg-indigo-500 hover:text-white"
+                }`}
               >
-                <img src={img} className="w-full h-full object-cover" alt="Thumbnail" />
+                <div className="relative z-10 flex items-center justify-center gap-3">
+                  {loading ? "Initializing..." : isAdded ? <><FaCheck />Added</> : <><FaShoppingBag /> Add To Cart</>}
+                </div>
+                {!isAdded && <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />}
               </button>
-            ))}
-          </div>
-        </div>
 
-        <div className="flex flex-col justify-center space-y-10">
-          <div className="space-y-4">
-            <p className="text-indigo-400 font-black uppercase tracking-[0.3em] text-[10px]">{product.brand} // {product.category}</p>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-tight uppercase">{product.name}</h1>
-            <div className="flex items-center gap-6 pt-2">
-              <span className="text-4xl font-black font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">
-                ₹{product.price}
-              </span>
+              <button 
+                onClick={handleBuyNow}
+                className="group px-12 py-6 bg-white/5 border border-white/10 rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3"
+              >
+                Buy Now <FaChevronRight className="transition-transform group-hover:translate-x-2" />
+              </button>
             </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 py-6 border-y border-white/5">
-            <div className="text-center space-y-2">
-              <FaShieldAlt className="mx-auto text-indigo-400" />
-              <p className="text-[8px] uppercase font-black text-gray-500 tracking-widest leading-none">Security<br/>Warranty</p>
-            </div>
-            <div className="text-center space-y-2 border-x border-white/5">
-              <FaTruck className="mx-auto text-indigo-400" />
-              <p className="text-[8px] uppercase font-black text-gray-500 tracking-widest leading-none">Express<br/>Shipping</p>
-            </div>
-            <div className="text-center space-y-2">
-              <FaUndo className="mx-auto text-indigo-400" />
-              <p className="text-[8px] uppercase font-black text-gray-500 tracking-widest leading-none">Verified<br/>Return</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button 
-              disabled={loading || product.stock <= 0}
-              onClick={handleAddToCart}
-              className={`flex-1 py-5 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] transition-all duration-500 shadow-xl active:scale-95 flex items-center justify-center gap-3 ${
-                isAdded 
-                ? "bg-emerald-600 text-white cursor-default" 
-                : "bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-pink-800 hover:to-pink-900"
-              }`}
-            >
-              {loading ? (
-                "Syncing..."
-              ) : isAdded ? (
-                <><FaCheck /> ADDED</>
-              ) : (
-                <><FaShoppingBag /> ADD TO CART</>
-              )}
-            </button>
-
-            <button 
-              onClick={handleBuyNow}
-              className="px-10 py-5 bg-white/5 border border-white/10 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] hover:bg-white hover:text-black transition-all active:scale-95"
-            >
-              BUY NOW
-            </button>
           </div>
         </div>
       </div>

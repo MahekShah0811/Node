@@ -141,7 +141,7 @@ const OrderConfirmation = () => {
                 <div className="pt-4 space-y-4">
                   <button 
                     onClick={() => alert("Verification successful. Signal processing.")}
-                    className="w-full py-5 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white font-black uppercase text-xs tracking-[0.3em] rounded-2xl hover:from-pink-600 hover:to-indigo-600 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(79,70,229,0.5)] active:scale-95 flex items-center justify-center gap-3"
+                    className="w-full py-5 bg-gradient-to-r from-pink-600 to-indigo-600 text-white font-black uppercase text-xs tracking-[0.3em] rounded-2xl hover:from-indigo-600 hover:to-indigo-800 transition-all duration-500 shadow-[0_10px_30px_-10px_rgba(79,70,229,0.5)] active:scale-95 flex items-center justify-center gap-3"
                   >
                     <FaBolt /> Checkout Now
                   </button>
